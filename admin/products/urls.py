@@ -30,6 +30,8 @@ urlpatterns = [
     path('product-user', UserViewSet.as_view({
         'get': 'list',
         'post': 'create'
+
+        
     })),
 
 
