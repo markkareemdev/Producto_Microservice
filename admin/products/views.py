@@ -7,6 +7,8 @@ from .serializers import ProductSerializer, ProductUserSerializer
 import random
 
 
+from .producer import publish
+
 
 class ProductViewSet(viewsets.ViewSet):
 
@@ -21,8 +23,13 @@ class ProductViewSet(viewsets.ViewSet):
                 "Status": "SUCCESS",
                 "Message": serializer.data
             }
+
+            # publish a msg after we list products
+            publish()
+
             return Response(status=status.HTTP_200_OK, data=data)
         except Exception as e:
+            print(e)
             error_data= {
                 "Status": "FAILED",
                 "Message": "Products not listed"

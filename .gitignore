@@ -97,3 +97,7 @@ Footer
 
 /__pycache__/urls.cpython-39.pyc
 
+admin/products/__pycache__/views.cpython-39.pyc
+admin/.dbdata/ib_logfile0
+admin/.dbdata/ibdata1
+admin/.dbdata/ibtmp1
