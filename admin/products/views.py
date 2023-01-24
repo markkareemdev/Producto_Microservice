@@ -25,7 +25,7 @@ class ProductViewSet(viewsets.ViewSet):
             }
 
             # publish a msg after we list products
-            publish()
+            # publish()
 
             return Response(status=status.HTTP_200_OK, data=data)
         except Exception as e:
@@ -44,12 +44,16 @@ class ProductViewSet(viewsets.ViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
+            # publish an event
+            publish('product_created', serializer.data)
+
             data= {
                 "Status": "SUCCESS",
                 "Message": serializer.data
             }
             return Response(status=status.HTTP_201_CREATED, data=data)
         except Exception as e:
+            print(e)
             error_data= {
                 "Status": "FAILED",
                 "Message": "Products not created"
@@ -89,6 +93,9 @@ class ProductViewSet(viewsets.ViewSet):
                 "Message": serializer.data
             }
 
+            # publish an event
+            publish('product_updated', serializer.data)
+
             return Response(data=data, status=status.HTTP_202_ACCEPTED)
         except Exception as e:
             error_data= {
@@ -108,6 +115,8 @@ class ProductViewSet(viewsets.ViewSet):
                 "Message": "Product(s) successfully deleted"
             }
             
+            # publish an event
+            publish('product_deleted', pk) 
             return Response(data=data, status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e:
@@ -161,24 +170,6 @@ class UserViewSet(viewsets.ViewSet):
             }
             
             return Response(data=error_data, status=status.HTTP_400_BAD_REQUEST)
-
-
-    # def retrieve(self, request, pk=None):
-    #     try:
-    #         product= self.queryset.filter(id=pk)[0]
-    #         serializer = ProductSerializer(product)
-    #         data= {
-    #             "Status": "SUCCESS",
-    #             "Message": serializer.data
-    #         }
-    #         return Response(data=data, status=status.HTTP_200_OK)
-    #     except Exception as e:
-    #         error_data= {
-    #             "Status": "SUCCESS",
-    #             "Message": "Products successfully deleted"
-    #         }
-            
-    #         return Response(data=error_data, status=status.HTTP_400_BAD_REQUEST)
 
 
 
